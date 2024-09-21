@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../utils/helper/calc_helper.dart';
 import '../controller/calculator_controller.dart';
 import 'submit_button.dart';
 import 'key_button.dart';
@@ -31,7 +32,8 @@ class KeypadWidget extends StatelessWidget {
           ),
         ),
         Consumer<CalculatorProvider>(builder: (context, provider, child) {
-          String input = checkBrackets(provider.equation);
+          String input = CalcHelperFunctions.checkBrackets(
+              provider.equation, provider.cursorPosition);
           return KeyButton(
             staticKey: "()",
             buttonKey: input,
@@ -44,8 +46,8 @@ class KeypadWidget extends StatelessWidget {
           textStyle: Theme.of(context).textTheme.bodyMedium,
         ),
         KeyButton(
-          staticKey: "/",
-          buttonKey: "/",
+          staticKey: "\u00F7",
+          buttonKey: "\u00F7",
           textStyle: Theme.of(context).textTheme.bodyMedium,
           borderRadius: const BorderRadius.only(
             topRight: Radius.circular(10),
@@ -111,9 +113,22 @@ class KeypadWidget extends StatelessWidget {
           buttonKey: "+",
           textStyle: Theme.of(context).textTheme.bodyMedium,
         ),
+        // Consumer<CalculatorProvider>(
+        //   builder: (context, provider, child) {
+        //     String input = CalcHelperFunctions.checkNegativeBrackets(provider);
+        //     return KeyButton(
+        //       staticKey: "+/-",
+        //       buttonKey: input,
+        //       textStyle: Theme.of(context).textTheme.bodyLarge,
+        //       borderRadius: const BorderRadius.only(
+        //         bottomLeft: Radius.circular(10),
+        //       ),
+        //     );
+        //   },
+        // ),
         KeyButton(
           staticKey: "+/-",
-          buttonKey: " ",
+          buttonKey: "(-",
           textStyle: Theme.of(context).textTheme.bodyLarge,
           borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(10),
@@ -136,16 +151,4 @@ class KeypadWidget extends StatelessWidget {
       ],
     );
   }
-}
-
-String checkBrackets(equation) {
-  for (int i = 1; i <= equation.length; i++) {
-    String character = equation[equation.length - i];
-    if (character == "(") {
-      return ")";
-    } else if (character == ")") {
-      return "(";
-    }
-  }
-  return "(";
 }

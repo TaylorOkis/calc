@@ -16,7 +16,7 @@ class SubmitButton extends StatelessWidget {
     final calculatorProvider =
         Provider.of<CalculatorProvider>(context, listen: false);
     return InkWell(
-      onTap: () => calculatorProvider.calculateExpression(),
+      onTap: () => calculatorProvider.calculateExpression(buttonText),
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(

@@ -39,8 +39,6 @@ class _MainPageState extends State<MainPage> {
               children: <Widget>[
                 Consumer<CalculatorProvider>(
                   builder: (context, provider, child) {
-                    // CalcHelperFunctions.updateControllerValue(
-                    //     provider.equation, provider.textController);
                     return InputTextField(controller: provider.textController);
                   },
                 ),

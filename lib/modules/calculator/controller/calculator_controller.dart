@@ -3,12 +3,25 @@ import 'package:flutter/material.dart';
 import '../../../utils/helper/calc_helper.dart';
 
 class CalculatorProvider with ChangeNotifier {
+  // Negative number controller
+  bool _isNegative = false;
+  bool get isNegative => _isNegative;
+  void setIsNegative() {
+    _isNegative = !isNegative;
+  }
+
+  // -- Text Editing controller
   final TextEditingController _textController = TextEditingController();
   TextEditingController get textController => _textController;
 
   void updateControllerValue(cursorPositon) {
     textController.text = equation;
     textController.selection = TextSelection.collapsed(offset: cursorPositon);
+  }
+
+  int get cursorPosition => textController.selection.baseOffset;
+  void setCursorPosition(cursorPosition) {
+    textController.selection = TextSelection.collapsed(offset: cursorPosition);
   }
 
   // -- Equation Variable
@@ -19,15 +32,39 @@ class CalculatorProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addToEquation(String value, int? cursorPosition) {
-    if (cursorPosition != null) {
-      String updatedEquation = equation.substring(0, cursorPosition) +
-          value +
-          equation.substring(cursorPosition);
-      setEquation(updatedEquation);
-      updateControllerValue(cursorPosition + 1);
-      notifyListeners();
+  void addToEquation(String value) {
+    if (equation.isNotEmpty && cursorPosition > 0) {
+      if (CalcHelperFunctions.isOperator(value)) {
+        if (CalcHelperFunctions.isOperator(equation[cursorPosition - 1]) &&
+            value != "%") {
+        } else {
+          if (equation.length > 1 && cursorPosition < equation.length) {
+            if (CalcHelperFunctions.isOperator(equation[cursorPosition])) {
+            } else {
+              addNewValue(cursorPosition, value);
+            }
+          } else {
+            addNewValue(cursorPosition, value);
+          }
+        }
+      } else {
+        addNewValue(cursorPosition, value);
+      }
+    } else {
+      if (!CalcHelperFunctions.isOperator(value)) {
+        addNewValue(cursorPosition, value);
+      } else {}
     }
+    calculateExpression(null);
+  }
+
+  void addNewValue(int cursorPosition, String value) {
+    String updatedEquation = equation.substring(0, cursorPosition) +
+        value +
+        equation.substring(cursorPosition);
+    setEquation(updatedEquation);
+    updateControllerValue(cursorPosition + 1);
+    notifyListeners();
   }
   // ---- //
 
@@ -39,8 +76,16 @@ class CalculatorProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void calculateExpression() {
-    setResult(CalcHelperFunctions.getExpressionEvaluation(equation));
+  void calculateExpression(String? buttonKey) {
+    String? calculationResult =
+        CalcHelperFunctions.getExpressionEvaluation(equation);
+    if (buttonKey == '=') {
+      setEquation(calculationResult);
+      setResult('');
+    } else {
+      setResult(calculationResult);
+    }
+    updateControllerValue(equation.length);
     notifyListeners();
   }
 
@@ -61,6 +106,7 @@ class CalculatorProvider with ChangeNotifier {
         notifyListeners();
         int newCursorPosition = cursorPosition - 1;
         updateControllerValue(newCursorPosition);
+        calculateExpression(null);
         return newCursorPosition;
       } else {
         return null;

@@ -28,7 +28,7 @@ class BackspaceButton extends StatelessWidget {
               );
             },
             icon: const Icon(
-              Icons.backspace_outlined,
+              Icons.backspace_rounded,
               color: Color(0xffF00404),
               size: 34,
             ),

@@ -10,7 +10,7 @@ class Apptheme {
       brightness: Brightness.light,
       textTheme: TextTheme(
         displayLarge: const TextStyle(
-            fontSize: 36,
+            fontSize: 42,
             color: Color(0xff000000),
             fontWeight: FontWeight.w700), // Display figures
         bodyLarge: const TextStyle(
@@ -47,7 +47,7 @@ class Apptheme {
       brightness: Brightness.dark,
       textTheme: TextTheme(
         displayLarge: const TextStyle(
-            fontSize: 36,
+            fontSize: 42,
             color: Color(0xffFFFFFF),
             fontWeight: FontWeight.w700), // Display figures
         bodyLarge: const TextStyle(
